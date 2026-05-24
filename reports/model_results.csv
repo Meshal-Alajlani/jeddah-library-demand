@@ -1,0 +1,5 @@
+Model,R2,MAE,RMSE
+Neural Network,0.9411,3.5722,5.104
+Random Forest,0.9203,4.2967,5.9376
+Linear Regression,0.8629,6.0693,7.7858
+Decision Tree,0.8613,5.915,7.8324

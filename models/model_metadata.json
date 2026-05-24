@@ -1,0 +1,25 @@
+{
+  "best_model": "Neural Network",
+  "best_rmse": 5.104,
+  "features": [
+    "Hour",
+    "Temperature_C",
+    "Humidity_pct",
+    "Wind_Speed_ms",
+    "Visibility_m",
+    "Solar_Radiation_MJm2",
+    "Rainfall_mm",
+    "Month",
+    "Day",
+    "Is_Peak_Hour",
+    "Is_Weekend",
+    "Season",
+    "Holiday",
+    "Library_Branch",
+    "Top_Category",
+    "Membership_Type",
+    "Day_of_Week",
+    "Temperature_Bin"
+  ],
+  "rows_after_cleaning": 6367
+}
