@@ -40,6 +40,7 @@ High expected demand. Add more staff during this hour.
 - Sample prediction script
 - Prediction API
 - Interactive dashboard
+- Docker support
 - Demand insights
 - Staffing recommendation
 
@@ -103,7 +104,10 @@ jeddah-library-demand/
 │   ├── predict.py
 │   └── train_model.py
 │
+├── .dockerignore
 ├── .gitignore
+├── Dockerfile
+├── docker-compose.yml
 ├── README.md
 └── requirements.txt
 ```
@@ -310,6 +314,48 @@ High expected demand. Add more staff during this hour.
 
 ---
 
+## Run with Docker
+
+This project can also be started using Docker.
+
+Make sure Docker Desktop is running.
+
+Build and start the containers:
+
+```bash
+docker compose up --build
+```
+
+After the containers start, open:
+
+```text
+http://127.0.0.1:8000
+```
+
+For the API.
+
+Open:
+
+```text
+http://127.0.0.1:8501
+```
+
+For the dashboard.
+
+To stop the containers, press:
+
+```text
+Ctrl + C
+```
+
+Or run:
+
+```bash
+docker compose down
+```
+
+---
+
 ## Main Commands Summary
 
 Install libraries:
@@ -348,6 +394,18 @@ Run dashboard:
 python -m streamlit run dashboard/app.py
 ```
 
+Run with Docker:
+
+```bash
+docker compose up --build
+```
+
+Stop Docker containers:
+
+```bash
+docker compose down
+```
+
 ---
 
 ## Technologies Used
@@ -358,6 +416,8 @@ python -m streamlit run dashboard/app.py
 - Scikit-learn
 - FastAPI
 - Streamlit
+- Docker
+- Docker Compose
 - Joblib
 - Git
 - GitHub
@@ -376,13 +436,13 @@ Instead of only building a model, this project turns the model into a usable sys
 - A saved best model
 - An API
 - An interactive dashboard
+- Dockerized services
 - A decision recommendation
 
 ---
 
 ## Next Steps
 
-- Add Docker support
 - Add Airflow pipeline
 - Add MLflow experiment tracking
 - Improve dashboard design
