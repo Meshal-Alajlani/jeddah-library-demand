@@ -1,65 +1,389 @@
-# Jeddah Library Demand Forecasting System
+# Jeddah Library Demand Advisor
 
-This project predicts hourly library rental demand for public library branches in Jeddah.
+This project is an end-to-end machine learning system that predicts hourly library rental demand for public library branches in Jeddah.
 
-## Goal
+The goal is to help library managers make better staffing and inventory decisions using data instead of guessing.
 
-Help library management plan staffing and inventory by predicting the expected number of book rentals per hour.
+---
 
-## Current Version
+## Project Overview
 
-This is the first working version of the project.
+The system predicts the expected number of book rentals per hour based on:
 
-It includes:
+- Date
+- Hour
+- Weather data
+- Library branch
+- Book category
+- Membership type
+- Holiday status
+- Day of week
+
+The project also provides a simple staffing recommendation based on the predicted demand.
+
+Example:
+
+```text
+Expected rentals: 63.24
+High expected demand. Add more staff during this hour.
+```
+
+---
+
+## Current Features
 
 - Data cleaning
 - Feature engineering
 - Model training
 - Model comparison
 - Best model saving
-- Simple prediction script
+- Sample prediction script
+- Prediction API
+- Interactive dashboard
+- Demand insights
+- Staffing recommendation
+
+---
 
 ## Models Used
+
+The project trains and compares four machine learning models:
 
 - Linear Regression
 - Decision Tree
 - Random Forest
 - Neural Network
 
+The best model is selected based on the evaluation results.
+
+---
+
+## Model Results
+
+| Model | R2 | MAE | RMSE |
+|---|---:|---:|---:|
+| Neural Network | 0.9411 | 3.5722 | 5.1040 |
+| Random Forest | 0.9203 | 4.2967 | 5.9376 |
+| Linear Regression | 0.8629 | 6.0693 | 7.7858 |
+| Decision Tree | 0.8613 | 5.9150 | 7.8324 |
+
+Best model:
+
+**Neural Network**
+
+---
+
 ## Project Structure
 
 ```text
-data/raw/
-data/processed/
-models/
-reports/
-src/
+jeddah-library-demand/
+│
+├── api/
+│   └── main.py
+│
+├── dashboard/
+│   └── app.py
+│
+├── data/
+│   ├── raw/
+│   │   └── jeddah_library_rentals.csv
+│   └── processed/
+│       └── cleaned_library_rentals.csv
+│
+├── models/
+│   ├── best_model.pkl
+│   └── model_metadata.json
+│
+├── reports/
+│   └── model_results.csv
+│
+├── src/
+│   ├── clean_data.py
+│   ├── data_processing.py
+│   ├── predict.py
+│   └── train_model.py
+│
+├── .gitignore
+├── README.md
+└── requirements.txt
 ```
 
-## How to Run
+---
 
-Create the cleaned dataset:
+## How to Run the Project
+
+### 1. Clone the Repository
+
+```bash
+git clone https://github.com/Meshal-Alajlani/jeddah-library-demand.git
+```
+
+Go inside the project folder:
+
+```bash
+cd jeddah-library-demand
+```
+
+---
+
+### 2. Install Requirements
+
+Install all required Python libraries:
+
+```bash
+pip install -r requirements.txt
+```
+
+---
+
+### 3. Clean the Data
+
+Run the data cleaning script:
 
 ```bash
 python src/clean_data.py
 ```
 
-Train the models:
+This will create the cleaned dataset here:
+
+```text
+data/processed/cleaned_library_rentals.csv
+```
+
+---
+
+### 4. Train the Models
+
+Run the training script:
 
 ```bash
 python src/train_model.py
 ```
 
-Run a sample prediction:
+This will:
+
+- Train the machine learning models
+- Compare their performance
+- Select the best model
+- Save the best model
+
+The best model will be saved here:
+
+```text
+models/best_model.pkl
+```
+
+The model results will be saved here:
+
+```text
+reports/model_results.csv
+```
+
+---
+
+### 5. Run a Sample Prediction
+
+Run:
 
 ```bash
 python src/predict.py
 ```
 
+Example output:
+
+```text
+Expected rentals: 92.84
+```
+
+---
+
+## Run the API
+
+The API allows users to send input data and get a rental demand prediction.
+
+Start the API server:
+
+```bash
+python -m uvicorn api.main:app --reload
+```
+
+Open this link in the browser:
+
+```text
+http://127.0.0.1:8000
+```
+
+You should see:
+
+```json
+{
+  "message": "Jeddah Library Demand API is running."
+}
+```
+
+API documentation:
+
+```text
+http://127.0.0.1:8000/docs
+```
+
+---
+
+## API Prediction Example
+
+Go to:
+
+```text
+http://127.0.0.1:8000/docs
+```
+
+Open:
+
+```text
+POST /predict
+```
+
+Click:
+
+```text
+Try it out
+```
+
+Use this example input:
+
+```json
+{
+  "Date": "24/05/2026",
+  "Hour": 17,
+  "Temperature_C": 34,
+  "Humidity_pct": 55,
+  "Wind_Speed_ms": 4.2,
+  "Visibility_m": 1500,
+  "Solar_Radiation_MJm2": 1.4,
+  "Rainfall_mm": 0,
+  "Season": "Summer",
+  "Holiday": "No",
+  "Library_Branch": "University Branch",
+  "Top_Category": "Technology",
+  "Membership_Type": "Student",
+  "Day_of_Week": "Sunday"
+}
+```
+
+Example response:
+
+```json
+{
+  "expected_rentals": 92.84
+}
+```
+
+---
+
+## Run the Dashboard
+
+The dashboard provides a visual interface for model results, demand insights, and what-if prediction.
+
+Start the dashboard:
+
+```bash
+python -m streamlit run dashboard/app.py
+```
+
+The browser will open the dashboard automatically.
+
+The dashboard includes:
+
+- Best model result
+- Model comparison
+- Average rentals by hour
+- Average rentals by branch
+- What-if demand prediction form
+- Staffing recommendation
+
+Example output:
+
+```text
+Expected rentals: 63.24
+High expected demand. Add more staff during this hour.
+```
+
+---
+
+## Main Commands Summary
+
+Install libraries:
+
+```bash
+pip install -r requirements.txt
+```
+
+Clean data:
+
+```bash
+python src/clean_data.py
+```
+
+Train models:
+
+```bash
+python src/train_model.py
+```
+
+Run sample prediction:
+
+```bash
+python src/predict.py
+```
+
+Run API:
+
+```bash
+python -m uvicorn api.main:app --reload
+```
+
+Run dashboard:
+
+```bash
+python -m streamlit run dashboard/app.py
+```
+
+---
+
+## Technologies Used
+
+- Python
+- Pandas
+- NumPy
+- Scikit-learn
+- FastAPI
+- Streamlit
+- Joblib
+- Git
+- GitHub
+
+---
+
+## Why This Project Matters
+
+Many small organizations make daily staffing and inventory decisions based on guessing.
+
+This project shows how machine learning can support better operational decisions by predicting demand and giving simple recommendations.
+
+Instead of only building a model, this project turns the model into a usable system with:
+
+- A training pipeline
+- A saved best model
+- An API
+- An interactive dashboard
+- A decision recommendation
+
+---
+
 ## Next Steps
 
-- Add an API using FastAPI
-- Add a dashboard using Streamlit
-- Add experiment tracking using MLflow
-- Add Docker
-- Add Airflow to run the full pipeline
+- Add Docker support
+- Add Airflow pipeline
+- Add MLflow experiment tracking
+- Improve dashboard design
+- Add deployment option
