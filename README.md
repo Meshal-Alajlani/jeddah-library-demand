@@ -41,6 +41,8 @@ High expected demand. Add more staff during this hour.
 - Prediction API
 - Interactive dashboard
 - Docker support
+- Airflow training pipeline
+- Daily automated pipeline schedule
 - Demand insights
 - Staffing recommendation
 
@@ -79,6 +81,10 @@ Best model:
 ```text
 jeddah-library-demand/
 │
+├── airflow/
+│   └── dags/
+│       └── library_pipeline.py
+│
 ├── api/
 │   └── main.py
 │
@@ -107,7 +113,9 @@ jeddah-library-demand/
 ├── .dockerignore
 ├── .gitignore
 ├── Dockerfile
+├── Dockerfile.airflow
 ├── docker-compose.yml
+├── docker-compose.airflow.yml
 ├── README.md
 └── requirements.txt
 ```
@@ -356,6 +364,65 @@ docker compose down
 
 ---
 
+## Run the Airflow Pipeline
+
+This project includes an Airflow pipeline that automates the machine learning workflow.
+
+The pipeline runs these tasks:
+
+```text
+preprocess_library_data
+↓
+train_and_evaluate_models
+↓
+validate_prediction_output
+```
+
+The DAG is scheduled to run daily.
+
+Make sure Docker Desktop is running.
+
+Start Airflow:
+
+```bash
+docker compose -f docker-compose.airflow.yml up --build
+```
+
+Open Airflow in the browser:
+
+```text
+http://127.0.0.1:8080
+```
+
+Login:
+
+```text
+username: admin
+password: admin
+```
+
+Find the DAG:
+
+```text
+library_demand_training_pipeline
+```
+
+You can run it manually by clicking the play button.
+
+To stop Airflow, press:
+
+```text
+Ctrl + C
+```
+
+Then run:
+
+```bash
+docker compose -f docker-compose.airflow.yml down
+```
+
+---
+
 ## Main Commands Summary
 
 Install libraries:
@@ -394,7 +461,7 @@ Run dashboard:
 python -m streamlit run dashboard/app.py
 ```
 
-Run with Docker:
+Run API and dashboard with Docker:
 
 ```bash
 docker compose up --build
@@ -404,6 +471,18 @@ Stop Docker containers:
 
 ```bash
 docker compose down
+```
+
+Run Airflow:
+
+```bash
+docker compose -f docker-compose.airflow.yml up --build
+```
+
+Stop Airflow:
+
+```bash
+docker compose -f docker-compose.airflow.yml down
 ```
 
 ---
@@ -418,6 +497,7 @@ docker compose down
 - Streamlit
 - Docker
 - Docker Compose
+- Apache Airflow
 - Joblib
 - Git
 - GitHub
@@ -437,13 +517,14 @@ Instead of only building a model, this project turns the model into a usable sys
 - An API
 - An interactive dashboard
 - Dockerized services
+- An Airflow automation pipeline
 - A decision recommendation
 
 ---
 
 ## Next Steps
 
-- Add Airflow pipeline
 - Add MLflow experiment tracking
 - Improve dashboard design
 - Add deployment option
+- Create an architecture diagram
