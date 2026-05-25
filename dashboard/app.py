@@ -77,7 +77,7 @@ with left_chart:
 
 with right_table:
     st.write("Evaluation results")
-    st.dataframe(results_df, use_container_width=True)
+    st.dataframe(results_df, width="stretch")
 
 st.divider()
 
@@ -85,7 +85,7 @@ st.subheader("Demand Insights")
 
 hourly_avg = data_df.groupby("Hour")["Rentals_Count"].mean()
 st.write("Average rentals by hour")
-st.line_chart(hourly_avg, use_container_width=True)
+st.line_chart(hourly_avg, width="stretch")
 
 branch_avg = (
     data_df.groupby("Library_Branch")["Rentals_Count"]
@@ -94,7 +94,7 @@ branch_avg = (
 )
 
 st.write("Average rentals by branch")
-st.bar_chart(branch_avg, use_container_width=True)
+st.bar_chart(branch_avg, width="stretch")
 
 st.divider()
 
