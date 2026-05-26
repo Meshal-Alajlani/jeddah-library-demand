@@ -6,3 +6,5 @@ venv/
 .env
 .ipynb_checkpoints/
 mlruns/
+mlflow.db
+mlartifacts/

@@ -1,8 +1,18 @@
+# Data processing
 pandas
 numpy
+
+# Machine learning
 scikit-learn
 joblib
+
+# API
 fastapi
 uvicorn
 pydantic
+
+# Dashboard
 streamlit
+
+# Experiment tracking
+mlflow
