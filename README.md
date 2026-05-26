@@ -43,6 +43,8 @@ High expected demand. Add more staff during this hour.
 - Docker support
 - Airflow training pipeline
 - Daily automated pipeline schedule
+- MLflow experiment tracking
+- Model metrics and parameter logging
 - Demand insights
 - Staffing recommendation
 
@@ -120,6 +122,8 @@ jeddah-library-demand/
 └── requirements.txt
 ```
 
+Generated local files such as `mlflow.db`, `mlartifacts/`, and `mlruns/` are ignored by Git.
+
 ---
 
 ## How to Run the Project
@@ -178,6 +182,7 @@ This will:
 - Compare their performance
 - Select the best model
 - Save the best model
+- Log model experiments using MLflow
 
 The best model will be saved here:
 
@@ -189,6 +194,13 @@ The model results will be saved here:
 
 ```text
 reports/model_results.csv
+```
+
+MLflow tracking files will be created locally:
+
+```text
+mlflow.db
+mlartifacts/
 ```
 
 ---
@@ -322,9 +334,53 @@ High expected demand. Add more staff during this hour.
 
 ---
 
-## Run with Docker
+## Run MLflow Experiment Tracking
 
-This project can also be started using Docker.
+This project uses MLflow to track machine learning experiments.
+
+MLflow records:
+
+- Model name
+- Model parameters
+- R2 score
+- MAE
+- RMSE
+- Best model summary
+- Training artifacts
+
+Start MLflow locally:
+
+```bash
+python -m mlflow ui --backend-store-uri sqlite:///mlflow.db --default-artifact-root mlartifacts --host 127.0.0.1 --port 5000
+```
+
+Open MLflow in the browser:
+
+```text
+http://127.0.0.1:5000
+```
+
+The experiment name is:
+
+```text
+Jeddah Library Demand Advisor
+```
+
+The main training runs include:
+
+```text
+Linear Regression
+Decision Tree
+Random Forest
+Neural Network
+Best Model Summary - Neural Network
+```
+
+---
+
+## Run API, Dashboard, and MLflow with Docker
+
+This project can start the API, dashboard, and MLflow using Docker Compose.
 
 Make sure Docker Desktop is running.
 
@@ -342,13 +398,17 @@ http://127.0.0.1:8000
 
 For the API.
 
-Open:
-
 ```text
 http://127.0.0.1:8501
 ```
 
 For the dashboard.
+
+```text
+http://127.0.0.1:5000
+```
+
+For MLflow.
 
 To stop the containers, press:
 
@@ -437,7 +497,7 @@ Clean data:
 python src/clean_data.py
 ```
 
-Train models:
+Train models and log MLflow experiments:
 
 ```bash
 python src/train_model.py
@@ -461,7 +521,13 @@ Run dashboard:
 python -m streamlit run dashboard/app.py
 ```
 
-Run API and dashboard with Docker:
+Run MLflow:
+
+```bash
+python -m mlflow ui --backend-store-uri sqlite:///mlflow.db --default-artifact-root mlartifacts --host 127.0.0.1 --port 5000
+```
+
+Run API, dashboard, and MLflow with Docker:
 
 ```bash
 docker compose up --build
@@ -498,6 +564,8 @@ docker compose -f docker-compose.airflow.yml down
 - Docker
 - Docker Compose
 - Apache Airflow
+- MLflow
+- SQLite
 - Joblib
 - Git
 - GitHub
@@ -518,13 +586,13 @@ Instead of only building a model, this project turns the model into a usable sys
 - An interactive dashboard
 - Dockerized services
 - An Airflow automation pipeline
+- MLflow experiment tracking
 - A decision recommendation
 
 ---
 
 ## Next Steps
 
-- Add MLflow experiment tracking
 - Improve dashboard design
 - Add deployment option
 - Create an architecture diagram
