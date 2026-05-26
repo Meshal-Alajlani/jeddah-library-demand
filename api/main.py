@@ -1,7 +1,7 @@
 from pathlib import Path
 import sys
 
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 
 
@@ -45,9 +45,16 @@ def home():
 
 @app.post("/predict")
 def predict(data: RentalInput):
-    input_data = data.model_dump()
-    prediction = predict_rentals(input_data)
+    try:
+        input_data = data.model_dump()
+        prediction = predict_rentals(input_data)
 
-    return {
-        "expected_rentals": round(prediction, 2)
-    }
+        return {
+            "expected_rentals": round(prediction, 2)
+        }
+
+    except Exception as e:
+        raise HTTPException(
+            status_code=500,
+            detail=f"Prediction failed: {str(e)}"
+        )

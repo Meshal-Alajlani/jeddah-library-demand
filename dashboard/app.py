@@ -152,6 +152,4 @@ if st.button("Predict Demand"):
 
 st.divider()
 
-st.caption(
-    "Built with Python, Scikit-learn, FastAPI, Streamlit, and GitHub."
-)
+st.caption("Meshal Alajlani · Jeddah Library Rental Forecast · 2026")

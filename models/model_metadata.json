@@ -21,5 +21,7 @@
     "Day_of_Week",
     "Temperature_Bin"
   ],
-  "rows_after_cleaning": 6367
+  "rows_after_cleaning": 6367,
+  "experiment_tracking": "MLflow",
+  "mlflow_backend": "SQLite"
 }
