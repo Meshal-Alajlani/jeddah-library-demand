@@ -1,9 +1,9 @@
 from pathlib import Path
 import sys
 
+import altair as alt
 import pandas as pd
 import streamlit as st
-import altair as alt
 
 
 ROOT_DIR = Path(__file__).resolve().parents[1]
@@ -42,14 +42,16 @@ dark = st.session_state.dark_mode
 if dark:
     BG = "#14100A"
     CARD = "#2A1D12"
+    FIELD_BG = "#21170F"
     BORDER = "#4A3220"
-    TEXT = "#F0E6D6"
-    TEXT_SUB = "#C4A882"
+    TEXT = "#F6EBDD"
+    TEXT_SUB = "#D5B98E"
+    TEXT_MUTED = "#B99972"
     ACCENT = "#C9A97A"
     BTN_BG = "#C9A97A"
     BTN_TEXT = "#14100A"
     DIVIDER = "#3A2818"
-    CAPTION = "#9C8064"
+    CAPTION = "#B99972"
 
     HIGH_BG = "#2D1410"
     HIGH_BORDER = "#C0392B"
@@ -70,34 +72,36 @@ if dark:
     CHART_COLOR = "#C9A97A"
 
 else:
-    BG = "#F5EFE4"
-    CARD = "#EDE3D2"
-    BORDER = "#D4BC98"
-    TEXT = "#2C1E12"
-    TEXT_SUB = "#4A3220"
-    ACCENT = "#8B5A2B"
+    BG = "#F4EADB"
+    CARD = "#E9DDC9"
+    FIELD_BG = "#F8F0E4"
+    BORDER = "#C9A97A"
+    TEXT = "#24180F"
+    TEXT_SUB = "#3B2A1E"
+    TEXT_MUTED = "#5A4332"
+    ACCENT = "#8A5527"
     BTN_BG = "#2C1E12"
-    BTN_TEXT = "#F5EFE4"
-    DIVIDER = "#D4BC98"
-    CAPTION = "#A07850"
+    BTN_TEXT = "#F8F0E4"
+    DIVIDER = "#C9A97A"
+    CAPTION = "#7A5638"
 
-    HIGH_BG = "#FBF0E0"
-    HIGH_BORDER = "#C0392B"
-    HIGH_TEXT = "#4A1C10"
+    HIGH_BG = "#F7E2D6"
+    HIGH_BORDER = "#B53A2E"
+    HIGH_TEXT = "#3B160F"
 
-    MEDIUM_BG = "#FBF5E8"
-    MEDIUM_BORDER = "#D4A017"
-    MEDIUM_TEXT = "#4A3510"
+    MEDIUM_BG = "#F4E8C7"
+    MEDIUM_BORDER = "#B8870F"
+    MEDIUM_TEXT = "#3B2A10"
 
-    LOW_BG = "#EAF2EC"
+    LOW_BG = "#E4EFE5"
     LOW_BORDER = "#2E7D45"
-    LOW_TEXT = "#1A3D22"
+    LOW_TEXT = "#173820"
 
-    INFO_BG = "#EDE3D2"
-    INFO_BORDER = "#8B5A2B"
-    INFO_TEXT = "#3D2510"
+    INFO_BG = "#E9DDC9"
+    INFO_BORDER = "#8A5527"
+    INFO_TEXT = "#2F2117"
 
-    CHART_COLOR = "#8B5A2B"
+    CHART_COLOR = "#9A632E"
 
 
 # ─────────────────────────────────────────────────────────────
@@ -106,12 +110,12 @@ else:
 st.markdown(
     f"""
     <style>
-    @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700;900&family=Lora:wght@400;500;600&family=Source+Sans+3:wght@300;400;500;600&display=swap');
-
     html, body, [class*="css"] {{
-        font-family: 'Source Sans 3', sans-serif;
+        font-family: "Segoe UI", sans-serif;
         background-color: {BG};
         color: {TEXT};
+        font-size: 16px;
+        font-weight: 500;
     }}
 
     .stApp {{
@@ -134,113 +138,111 @@ st.markdown(
     }}
 
     .hero-eyebrow {{
-        font-family: 'Source Sans 3', sans-serif;
-        font-size: 11px;
-        font-weight: 600;
-        letter-spacing: 0.22em;
+        font-size: 13px;
+        font-weight: 800;
+        letter-spacing: 0.20em;
         text-transform: uppercase;
         color: {ACCENT};
-        margin-bottom: 6px;
+        margin-bottom: 8px;
     }}
 
     .hero-title {{
-        font-family: 'Playfair Display', serif;
-        font-size: 52px;
-        font-weight: 800;
+        font-family: Georgia, serif;
+        font-size: 54px;
+        font-weight: 900;
         color: {TEXT};
         line-height: 1.1;
-        margin: 0 0 10px 0;
+        margin: 0 0 12px 0;
     }}
 
     .hero-sub {{
-        font-family: 'Source Sans 3', sans-serif;
-        font-size: 17px;
-        font-weight: 400;
+        font-size: 19px;
+        font-weight: 600;
         color: {TEXT_SUB};
-        max-width: 680px;
-        line-height: 1.6;
+        max-width: 760px;
+        line-height: 1.65;
     }}
 
     .section-heading {{
-        font-family: 'Playfair Display', serif;
-        font-size: 26px;
-        font-weight: 700;
+        font-family: Georgia, serif;
+        font-size: 29px;
+        font-weight: 900;
         color: {TEXT};
-        border-left: 4px solid {ACCENT};
-        padding-left: 14px;
+        border-left: 5px solid {ACCENT};
+        padding-left: 16px;
         margin: 0 0 1rem 0;
     }}
 
     .info-card {{
         background: {CARD};
         border: 1px solid {BORDER};
-        border-radius: 6px;
-        padding: 16px 20px;
-        font-family: 'Source Sans 3', sans-serif;
-        font-size: 15px;
+        border-radius: 7px;
+        padding: 18px 22px;
+        font-size: 16px;
+        font-weight: 600;
         color: {TEXT_SUB};
-        line-height: 1.6;
+        line-height: 1.7;
         margin-bottom: 1.5rem;
     }}
 
     [data-testid="stMetric"] {{
         background: {CARD} !important;
         border: 1px solid {BORDER} !important;
-        border-radius: 6px !important;
-        padding: 18px 20px !important;
+        border-radius: 7px !important;
+        padding: 20px 22px !important;
     }}
 
     [data-testid="stMetricLabel"] p {{
-        font-family: 'Source Sans 3', sans-serif !important;
-        font-size: 13px !important;
-        font-weight: 600 !important;
-        letter-spacing: 0.12em !important;
-        text-transform: uppercase !important;
-        color: {ACCENT} !important;
+         font-size: 15px !important;
+    font-weight: 800 !important;
+    letter-spacing: 0.08em !important;
+    text-transform: uppercase !important;
+    color: {ACCENT} !important;
     }}
 
     [data-testid="stMetricValue"] {{
-        font-family: 'Lora', serif !important;
-        font-size: 36px !important;
-        font-weight: 600 !important;
-        color: {TEXT} !important;
-        letter-spacing: 0.01em !important;
+         font-family: "Segoe UI", sans-serif !important;
+    font-size: 34px !important;
+    font-weight: 650 !important;
+    color: {TEXT} !important;
+    letter-spacing: 0 !important;
     }}
 
     .result-card {{
-        border-radius: 6px;
+        border-radius: 7px;
         padding: 22px 26px;
-        font-family: 'Source Sans 3', sans-serif;
-        font-size: 16px;
+        font-size: 18px;
+        font-weight: 650;
         line-height: 1.7;
         margin-bottom: 12px;
     }}
 
     .result-card strong {{
-        font-size: 17px;
+        font-size: 19px;
+        font-weight: 900;
     }}
 
     .result-high {{
         background: {HIGH_BG};
-        border-left: 4px solid {HIGH_BORDER};
+        border-left: 5px solid {HIGH_BORDER};
         color: {HIGH_TEXT};
     }}
 
     .result-medium {{
         background: {MEDIUM_BG};
-        border-left: 4px solid {MEDIUM_BORDER};
+        border-left: 5px solid {MEDIUM_BORDER};
         color: {MEDIUM_TEXT};
     }}
 
     .result-low {{
         background: {LOW_BG};
-        border-left: 4px solid {LOW_BORDER};
+        border-left: 5px solid {LOW_BORDER};
         color: {LOW_TEXT};
     }}
 
     .result-info {{
         background: {INFO_BG};
-        border-left: 4px solid {INFO_BORDER};
+        border-left: 5px solid {INFO_BORDER};
         color: {INFO_TEXT};
     }}
 
@@ -248,103 +250,128 @@ st.markdown(
     .stNumberInput label,
     .stSlider label,
     .stDateInput label {{
-        font-family: 'Source Sans 3', sans-serif !important;
-        font-size: 12px !important;
-        font-weight: 600 !important;
-        letter-spacing: 0.1em !important;
+        font-size: 13px !important;
+        font-weight: 900 !important;
+        letter-spacing: 0.11em !important;
         text-transform: uppercase !important;
         color: {ACCENT} !important;
     }}
 
-    .stSelectbox > div > div > div,
-    .stSelectbox [data-baseweb="select"] > div {{
-        background-color: {CARD} !important;
-        border-color: {BORDER} !important;
-        border-radius: 4px !important;
-        color: {TEXT} !important;
-        cursor: pointer !important;
-        font-family: 'Source Sans 3', sans-serif !important;
-    }}
-
-    .stSelectbox svg {{
-        fill: {ACCENT} !important;
+    .stTextInput label,
+    .stTextArea label {{
+        font-size: 13px !important;
+        font-weight: 900 !important;
+        letter-spacing: 0.11em !important;
+        text-transform: uppercase !important;
         color: {ACCENT} !important;
     }}
 
-    [data-baseweb="popover"] ul,
-    [data-baseweb="menu"] {{
-        background-color: {CARD} !important;
+    input {{
+        background-color: {FIELD_BG} !important;
+        color: {TEXT} !important;
+        font-weight: 700 !important;
+        border: 1px solid {BORDER} !important;
+        border-radius: 6px !important;
+    }}
+
+    [data-baseweb="input"] {{
+        background-color: {FIELD_BG} !important;
+        border: 1px solid {BORDER} !important;
+        border-radius: 6px !important;
+    }}
+
+    [data-baseweb="input"] input {{
+        color: {TEXT} !important;
+        font-weight: 700 !important;
+        background-color: {FIELD_BG} !important;
+    }}
+
+    [data-baseweb="select"] > div {{
+        background-color: {FIELD_BG} !important;
+        border: 1px solid {BORDER} !important;
+        border-radius: 6px !important;
+        color: {TEXT} !important;
+        font-weight: 700 !important;
+    }}
+
+    [data-baseweb="select"] span {{
+        color: {TEXT} !important;
+        font-weight: 700 !important;
+    }}
+
+    [data-baseweb="popover"] {{
+        background-color: {FIELD_BG} !important;
+        border: 1px solid {BORDER} !important;
+        border-radius: 8px !important;
+    }}
+
+    [role="listbox"] {{
+        background-color: {FIELD_BG} !important;
         border: 1px solid {BORDER} !important;
     }}
 
-    [data-baseweb="menu"] li {{
+    [role="option"] {{
+        background-color: {FIELD_BG} !important;
         color: {TEXT} !important;
-        font-family: 'Source Sans 3', sans-serif !important;
-        cursor: pointer !important;
+        font-size: 15px !important;
+        font-weight: 750 !important;
     }}
 
-    [data-baseweb="menu"] li:hover {{
-        background-color: {BORDER} !important;
-    }}
-
-    .stNumberInput > div > div > input {{
+    [role="option"]:hover {{
         background-color: {CARD} !important;
-        border-color: {BORDER} !important;
         color: {TEXT} !important;
-        border-radius: 4px !important;
-        font-family: 'Source Sans 3', sans-serif !important;
     }}
 
-    .stNumberInput > div > div > div button {{
-        background-color: {BORDER} !important;
-        color: {TEXT} !important;
-        border-color: {BORDER} !important;
-    }}
-
-    .stDateInput > div > div > input {{
+    [aria-selected="true"] {{
         background-color: {CARD} !important;
-        border-color: {BORDER} !important;
         color: {TEXT} !important;
-        font-family: 'Source Sans 3', sans-serif !important;
+        font-weight: 900 !important;
+    }}
+
+    .stSlider [data-baseweb="slider"] div {{
+        color: {TEXT} !important;
     }}
 
     .stButton > button {{
         background-color: {BTN_BG} !important;
         color: {BTN_TEXT} !important;
         border: none !important;
-        border-radius: 6px !important;
-        font-family: 'Source Sans 3', sans-serif !important;
-        font-size: 13px !important;
-        font-weight: 600 !important;
-        letter-spacing: 0.14em !important;
+        border-radius: 7px !important;
+        font-size: 14px !important;
+        font-weight: 900 !important;
+        letter-spacing: 0.12em !important;
         text-transform: uppercase !important;
-        padding: 10px 28px !important;
+        padding: 11px 30px !important;
     }}
 
     .stButton > button:hover {{
-        opacity: 0.85 !important;
+        opacity: 0.88 !important;
     }}
 
     hr {{
         border-color: {DIVIDER} !important;
-        margin: 2rem 0 !important;
+        margin: 2.2rem 0 !important;
     }}
 
     .chart-label {{
-        font-family: 'Playfair Display', serif;
-        font-size: 18px;
-        font-weight: 700;
+        font-family: Georgia, serif;
+        font-size: 20px;
+        font-weight: 900;
         color: {TEXT};
-        margin-bottom: 6px;
+        margin-bottom: 8px;
     }}
 
     .caption-line {{
-        font-family: 'Source Sans 3', sans-serif;
-        font-size: 12px;
+        font-size: 13px;
+        font-weight: 700;
         color: {CAPTION};
         letter-spacing: 0.06em;
         text-align: center;
         padding-top: 1rem;
+    }}
+
+    p, span, div {{
+        color: inherit;
     }}
     </style>
     """,
@@ -394,9 +421,20 @@ def get_branch_note(prediction, hour):
 
 
 def build_input_data(
-    selected_date, hour, temperature, humidity, wind_speed,
-    visibility, solar_radiation, rainfall, season, holiday,
-    branch, category, membership, day_of_week,
+    selected_date,
+    hour,
+    temperature,
+    humidity,
+    wind_speed,
+    visibility,
+    solar_radiation,
+    rainfall,
+    season,
+    holiday,
+    branch,
+    category,
+    membership,
+    day_of_week,
 ):
     return {
         "Date": selected_date.strftime("%d/%m/%Y"),
@@ -446,22 +484,25 @@ with toggle_col:
 
 
 # ─────────────────────────────────────────────────────────────
-# Snapshot metrics
+# Snapshot
 # ─────────────────────────────────────────────────────────────
 hourly_avg_all = data_df.groupby("Hour")["Rentals_Count"].mean()
-peak_hour      = int(hourly_avg_all.idxmax())
-peak_value     = round(hourly_avg_all.max(), 1)
+peak_hour = int(hourly_avg_all.idxmax())
+peak_value = round(hourly_avg_all.max(), 1)
 branches_count = data_df["Library_Branch"].nunique()
-total_records  = f"{len(data_df):,}"
+total_records = f"{len(data_df):,}"
 
 col_a, col_b, col_c, col_d = st.columns(4)
 
 with col_a:
     st.metric("Peak Hour", f"{peak_hour}:00")
+
 with col_b:
     st.metric("Avg Rentals at Peak", peak_value)
+
 with col_c:
     st.metric("Branches", branches_count)
+
 with col_d:
     st.metric("Records Used", total_records)
 
@@ -486,47 +527,61 @@ st.markdown(
 left, right = st.columns(2, gap="large")
 
 with left:
-    selected_date   = st.date_input("Date")
-    hour            = st.slider("Hour of Day", 0, 23, 17)
-    temperature     = st.number_input("Temperature (°C)", value=34.0)
-    humidity        = st.number_input("Humidity (%)", value=55.0)
-    wind_speed      = st.number_input("Wind Speed (m/s)", value=4.2)
-    visibility      = st.number_input("Visibility (m)", value=1500.0)
+    selected_date = st.date_input("Date")
+    hour = st.slider("Hour of Day", 0, 23, 17)
+    temperature = st.number_input("Temperature (°C)", value=34.0)
+    humidity = st.number_input("Humidity (%)", value=55.0)
+    wind_speed = st.number_input("Wind Speed (m/s)", value=4.2)
+    visibility = st.number_input("Visibility (m)", value=1500.0)
     solar_radiation = st.number_input("Solar Radiation (MJ/m²)", value=1.4)
-    rainfall        = st.number_input("Rainfall (mm)", value=0.0)
+    rainfall = st.number_input("Rainfall (mm)", value=0.0)
 
 with right:
-    season      = st.selectbox("Season",          clean_options(data_df["Season"]))
-    holiday     = st.selectbox("Holiday",         clean_options(data_df["Holiday"]))
-    branch      = st.selectbox("Library Branch",  clean_options(data_df["Library_Branch"]))
-    category    = st.selectbox("Top Category",    clean_options(data_df["Top_Category"]))
-    membership  = st.selectbox("Membership Type", clean_options(data_df["Membership_Type"]))
-    day_of_week = st.selectbox("Day of Week",     clean_options(data_df["Day_of_Week"]))
+    season = st.selectbox("Season", clean_options(data_df["Season"]))
+    holiday = st.selectbox("Holiday", clean_options(data_df["Holiday"]))
+    branch = st.selectbox("Library Branch", clean_options(data_df["Library_Branch"]))
+    category = st.selectbox("Top Category", clean_options(data_df["Top_Category"]))
+    membership = st.selectbox("Membership Type", clean_options(data_df["Membership_Type"]))
+    day_of_week = st.selectbox("Day of Week", clean_options(data_df["Day_of_Week"]))
 
 st.markdown("<br>", unsafe_allow_html=True)
 
 if st.button("Estimate Demand"):
     input_data = build_input_data(
-        selected_date, hour, temperature, humidity, wind_speed,
-        visibility, solar_radiation, rainfall, season, holiday,
-        branch, category, membership, day_of_week,
+        selected_date,
+        hour,
+        temperature,
+        humidity,
+        wind_speed,
+        visibility,
+        solar_radiation,
+        rainfall,
+        season,
+        holiday,
+        branch,
+        category,
+        membership,
+        day_of_week,
     )
 
     try:
-        prediction   = predict_rentals(input_data)
+        prediction = predict_rentals(input_data)
         demand_label, demand_css = get_demand_level(prediction)
         suggested_action = get_suggested_action(prediction)
-        branch_note      = get_branch_note(prediction, hour)
+        branch_note = get_branch_note(prediction, hour)
 
         st.divider()
         st.markdown('<div class="section-heading">Demand Summary</div>', unsafe_allow_html=True)
 
-        r1, r2, r3 = st.columns(3)
-        with r1:
+        result_1, result_2, result_3 = st.columns(3)
+
+        with result_1:
             st.metric("Expected Rentals", round(prediction, 1))
-        with r2:
+
+        with result_2:
             st.metric("Demand Level", demand_label)
-        with r3:
+
+        with result_3:
             st.metric("Hour", f"{hour}:00")
 
         st.markdown("<br>", unsafe_allow_html=True)
@@ -535,6 +590,7 @@ if st.button("Estimate Demand"):
             f'<div class="result-card result-{demand_css}"><strong>Demand outlook:</strong> {branch_note}</div>',
             unsafe_allow_html=True
         )
+
         st.markdown(
             f'<div class="result-card result-info"><strong>Suggested action:</strong> {suggested_action}</div>',
             unsafe_allow_html=True
@@ -542,6 +598,7 @@ if st.button("Estimate Demand"):
 
     except Exception as error:
         st.error(f"Prediction failed: {error}")
+
 
 st.divider()
 
@@ -573,7 +630,7 @@ with insight_1:
             y=alt.Y("Avg Rentals:Q", title="Average Rentals"),
             tooltip=["Hour", "Avg Rentals"]
         )
-        .properties(height=330)
+        .properties(height=340)
     )
 
     st.altair_chart(hour_chart, use_container_width=True)
@@ -599,10 +656,11 @@ with insight_2:
             y=alt.Y("Library Branch:N", title="Library Branch", sort="-x"),
             tooltip=["Library Branch", "Avg Rentals"]
         )
-        .properties(height=330)
+        .properties(height=340)
     )
 
     st.altair_chart(branch_chart, use_container_width=True)
+
 
 st.divider()
 
@@ -611,6 +669,6 @@ st.divider()
 # Footer
 # ─────────────────────────────────────────────────────────────
 st.markdown(
-    '<div class="caption-line">Meshal Alajlani · Jeddah Library Demand Forecaster · 2026</div>',
+    '<div class="caption-line">Meshal Alajlani · Jeddah Library Forecast · 2026</div>',
     unsafe_allow_html=True
 )
