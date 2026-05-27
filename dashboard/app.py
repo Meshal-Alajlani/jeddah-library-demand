@@ -3,6 +3,7 @@ import sys
 
 import pandas as pd
 import streamlit as st
+import altair as alt
 
 
 ROOT_DIR = Path(__file__).resolve().parents[1]
@@ -554,18 +555,54 @@ insight_1, insight_2 = st.columns(2, gap="large")
 
 with insight_1:
     st.markdown('<p class="chart-label">Average rentals by hour</p>', unsafe_allow_html=True)
-    hourly_avg = data_df.groupby("Hour")["Rentals_Count"].mean().rename("Avg Rentals")
-    st.line_chart(hourly_avg, color=CHART_COLOR)
+
+    hourly_avg = (
+        data_df.groupby("Hour")["Rentals_Count"]
+        .mean()
+        .round(1)
+        .reset_index()
+    )
+
+    hourly_avg.columns = ["Hour", "Avg Rentals"]
+
+    hour_chart = (
+        alt.Chart(hourly_avg)
+        .mark_bar(color=CHART_COLOR)
+        .encode(
+            x=alt.X("Hour:O", title="Hour"),
+            y=alt.Y("Avg Rentals:Q", title="Average Rentals"),
+            tooltip=["Hour", "Avg Rentals"]
+        )
+        .properties(height=330)
+    )
+
+    st.altair_chart(hour_chart, use_container_width=True)
 
 with insight_2:
     st.markdown('<p class="chart-label">Average rentals by branch</p>', unsafe_allow_html=True)
+
     branch_avg = (
         data_df.groupby("Library_Branch")["Rentals_Count"]
         .mean()
-        .sort_values(ascending=False)
-        .rename("Avg Rentals")
+        .sort_values(ascending=True)
+        .round(1)
+        .reset_index()
     )
-    st.bar_chart(branch_avg, color=CHART_COLOR)
+
+    branch_avg.columns = ["Library Branch", "Avg Rentals"]
+
+    branch_chart = (
+        alt.Chart(branch_avg)
+        .mark_bar(color=CHART_COLOR)
+        .encode(
+            x=alt.X("Avg Rentals:Q", title="Average Rentals"),
+            y=alt.Y("Library Branch:N", title="Library Branch", sort="-x"),
+            tooltip=["Library Branch", "Avg Rentals"]
+        )
+        .properties(height=330)
+    )
+
+    st.altair_chart(branch_chart, use_container_width=True)
 
 st.divider()
 
