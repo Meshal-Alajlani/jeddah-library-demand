@@ -13,6 +13,7 @@ pydantic
 
 # Dashboard
 streamlit
+altair
 
 # Experiment tracking
 mlflow

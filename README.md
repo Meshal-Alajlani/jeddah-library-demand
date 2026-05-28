@@ -1,8 +1,18 @@
-# Jeddah Library Demand Advisor
+﻿# Jeddah Library Forecast
 
-This project is an end-to-end machine learning system that predicts hourly library rental demand for public library branches in Jeddah.
+An end-to-end machine learning project that forecasts hourly library rental demand for public library branches in Jeddah.
 
-The goal is to help library managers make better staffing and inventory decisions using data instead of guessing.
+The project helps library managers understand expected demand, identify peak activity, and make better staffing and branch planning decisions using data.
+
+---
+
+## Live Demo
+
+Try the dashboard here:
+
+```text
+https://huggingface.co/spaces/ITMeshal/jeddah-library-forecast
+```
 
 ---
 
@@ -19,13 +29,14 @@ The system predicts the expected number of book rentals per hour based on:
 - Holiday status
 - Day of week
 
-The project also provides a simple staffing recommendation based on the predicted demand.
+The project also provides a simple suggested action based on the predicted demand.
 
 Example:
 
 ```text
-Expected rentals: 63.24
-High expected demand. Add more staff during this hour.
+Expected rentals: 63.2
+Demand level: High
+Suggested action: Add extra staff and prepare popular categories before this hour.
 ```
 
 ---
@@ -38,8 +49,9 @@ High expected demand. Add more staff during this hour.
 - Model comparison
 - Best model saving
 - Sample prediction script
-- Prediction API
-- Interactive dashboard
+- Prediction API using FastAPI
+- Interactive Streamlit dashboard
+- Live dashboard demo on Hugging Face Spaces
 - Docker support
 - Airflow training pipeline
 - Daily automated pipeline schedule
@@ -59,7 +71,7 @@ The project trains and compares four machine learning models:
 - Random Forest
 - Neural Network
 
-The best model is selected based on the evaluation results.
+The best model is selected based on evaluation results.
 
 ---
 
@@ -119,7 +131,8 @@ jeddah-library-demand/
 ├── docker-compose.yml
 ├── docker-compose.airflow.yml
 ├── README.md
-└── requirements.txt
+├── requirements.txt
+└── streamlit_app.py
 ```
 
 Generated local files such as `mlflow.db`, `mlartifacts/`, and `mlruns/` are ignored by Git.
@@ -144,8 +157,6 @@ cd jeddah-library-demand
 
 ### 2. Install Requirements
 
-Install all required Python libraries:
-
 ```bash
 pip install -r requirements.txt
 ```
@@ -154,13 +165,11 @@ pip install -r requirements.txt
 
 ### 3. Clean the Data
 
-Run the data cleaning script:
-
 ```bash
 python src/clean_data.py
 ```
 
-This will create the cleaned dataset here:
+This creates the cleaned dataset here:
 
 ```text
 data/processed/cleaned_library_rentals.csv
@@ -169,8 +178,6 @@ data/processed/cleaned_library_rentals.csv
 ---
 
 ### 4. Train the Models
-
-Run the training script:
 
 ```bash
 python src/train_model.py
@@ -206,8 +213,6 @@ mlartifacts/
 ---
 
 ### 5. Run a Sample Prediction
-
-Run:
 
 ```bash
 python src/predict.py
@@ -306,7 +311,7 @@ Example response:
 
 ## Run the Dashboard
 
-The dashboard provides a visual interface for model results, demand insights, and what-if prediction.
+The dashboard provides a visual interface for demand forecasting, branch activity, peak hours, and suggested staffing actions.
 
 Start the dashboard:
 
@@ -314,22 +319,28 @@ Start the dashboard:
 python -m streamlit run dashboard/app.py
 ```
 
-The browser will open the dashboard automatically.
+Or run the Hugging Face entry point locally:
+
+```bash
+python -m streamlit run streamlit_app.py
+```
 
 The dashboard includes:
 
-- Best model result
-- Model comparison
+- Expected rental demand
+- Demand level
+- Suggested operational action
+- Peak hour snapshot
 - Average rentals by hour
 - Average rentals by branch
-- What-if demand prediction form
-- Staffing recommendation
+- Light and dark mode
 
 Example output:
 
 ```text
-Expected rentals: 63.24
-High expected demand. Add more staff during this hour.
+Expected rentals: 63.2
+Demand level: High
+Suggested action: Add extra staff and prepare popular categories before this hour.
 ```
 
 ---
@@ -561,6 +572,7 @@ docker compose -f docker-compose.airflow.yml down
 - Scikit-learn
 - FastAPI
 - Streamlit
+- Altair
 - Docker
 - Docker Compose
 - Apache Airflow
@@ -569,6 +581,7 @@ docker compose -f docker-compose.airflow.yml down
 - Joblib
 - Git
 - GitHub
+- Hugging Face Spaces
 
 ---
 
@@ -587,12 +600,12 @@ Instead of only building a model, this project turns the model into a usable sys
 - Dockerized services
 - An Airflow automation pipeline
 - MLflow experiment tracking
-- A decision recommendation
+- A live demo on Hugging Face Spaces
+- A simple decision recommendation
 
 ---
 
-## Next Steps
+## Future Improvements
 
-- Improve dashboard design
-- Add deployment option
-- Create an architecture diagram
+- Add an architecture diagram
+- Add dashboard screenshots to the README
