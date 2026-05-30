@@ -46,7 +46,6 @@ if dark:
     BORDER = "#4A3220"
     TEXT = "#F6EBDD"
     TEXT_SUB = "#D5B98E"
-    TEXT_MUTED = "#B99972"
     ACCENT = "#C9A97A"
     BTN_BG = "#C9A97A"
     BTN_TEXT = "#14100A"
@@ -78,7 +77,6 @@ else:
     BORDER = "#C9A97A"
     TEXT = "#24180F"
     TEXT_SUB = "#3B2A1E"
-    TEXT_MUTED = "#5A4332"
     ACCENT = "#8A5527"
     BTN_BG = "#2C1E12"
     BTN_TEXT = "#F8F0E4"
@@ -193,19 +191,19 @@ st.markdown(
     }}
 
     [data-testid="stMetricLabel"] p {{
-         font-size: 15px !important;
-    font-weight: 800 !important;
-    letter-spacing: 0.08em !important;
-    text-transform: uppercase !important;
-    color: {ACCENT} !important;
+        font-size: 15px !important;
+        font-weight: 800 !important;
+        letter-spacing: 0.08em !important;
+        text-transform: uppercase !important;
+        color: {ACCENT} !important;
     }}
 
     [data-testid="stMetricValue"] {{
-         font-family: "Segoe UI", sans-serif !important;
-    font-size: 34px !important;
-    font-weight: 650 !important;
-    color: {TEXT} !important;
-    letter-spacing: 0 !important;
+        font-family: "Segoe UI", sans-serif !important;
+        font-size: 34px !important;
+        font-weight: 650 !important;
+        color: {TEXT} !important;
+        letter-spacing: 0 !important;
     }}
 
     .result-card {{
@@ -250,15 +248,6 @@ st.markdown(
     .stNumberInput label,
     .stSlider label,
     .stDateInput label {{
-        font-size: 13px !important;
-        font-weight: 900 !important;
-        letter-spacing: 0.11em !important;
-        text-transform: uppercase !important;
-        color: {ACCENT} !important;
-    }}
-
-    .stTextInput label,
-    .stTextArea label {{
         font-size: 13px !important;
         font-weight: 900 !important;
         letter-spacing: 0.11em !important;
@@ -328,10 +317,6 @@ st.markdown(
         font-weight: 900 !important;
     }}
 
-    .stSlider [data-baseweb="slider"] div {{
-        color: {TEXT} !important;
-    }}
-
     .stButton > button {{
         background-color: {BTN_BG} !important;
         color: {BTN_TEXT} !important;
@@ -368,10 +353,6 @@ st.markdown(
         letter-spacing: 0.06em;
         text-align: center;
         padding-top: 1rem;
-    }}
-
-    p, span, div {{
-        color: inherit;
     }}
     </style>
     """,
@@ -474,7 +455,7 @@ with hero_col:
             </div>
         </div>
         """,
-        unsafe_allow_html=True
+        unsafe_allow_html=True,
     )
 
 with toggle_col:
@@ -518,10 +499,9 @@ st.markdown(
     """
     <div class="info-card">
         Choose a branch, hour, and daily conditions to estimate expected rentals.
-        Model experiments and training history are tracked separately in MLflow.
     </div>
     """,
-    unsafe_allow_html=True
+    unsafe_allow_html=True,
 )
 
 left, right = st.columns(2, gap="large")
@@ -588,12 +568,12 @@ if st.button("Estimate Demand"):
 
         st.markdown(
             f'<div class="result-card result-{demand_css}"><strong>Demand outlook:</strong> {branch_note}</div>',
-            unsafe_allow_html=True
+            unsafe_allow_html=True,
         )
 
         st.markdown(
             f'<div class="result-card result-info"><strong>Suggested action:</strong> {suggested_action}</div>',
-            unsafe_allow_html=True
+            unsafe_allow_html=True,
         )
 
     except Exception as error:
@@ -628,7 +608,7 @@ with insight_1:
         .encode(
             x=alt.X("Hour:O", title="Hour"),
             y=alt.Y("Avg Rentals:Q", title="Average Rentals"),
-            tooltip=["Hour", "Avg Rentals"]
+            tooltip=["Hour", "Avg Rentals"],
         )
         .properties(height=340)
     )
@@ -654,7 +634,7 @@ with insight_2:
         .encode(
             x=alt.X("Avg Rentals:Q", title="Average Rentals"),
             y=alt.Y("Library Branch:N", title="Library Branch", sort="-x"),
-            tooltip=["Library Branch", "Avg Rentals"]
+            tooltip=["Library Branch", "Avg Rentals"],
         )
         .properties(height=340)
     )
@@ -670,5 +650,5 @@ st.divider()
 # ─────────────────────────────────────────────────────────────
 st.markdown(
     '<div class="caption-line">Meshal Alajlani · Jeddah Library Forecast · 2026</div>',
-    unsafe_allow_html=True
+    unsafe_allow_html=True,
 )
