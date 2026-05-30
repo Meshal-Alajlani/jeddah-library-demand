@@ -1,27 +1,20 @@
 ﻿# Jeddah Library Forecast
 
-An end-to-end machine learning project that forecasts hourly library rental demand for public library branches in Jeddah.
+A machine learning project that forecasts hourly book rental demand for public library branches in Jeddah.
 
-The project helps library managers understand expected demand, identify peak activity, and make better staffing and branch planning decisions using data.
-
----
+The project includes a trained prediction model, a FastAPI prediction service, a Streamlit dashboard, Docker support, Airflow automation, MLflow experiment tracking, and a live Hugging Face demo.
 
 ## Live Demo
 
-Try the dashboard here:
-
-```text
 https://huggingface.co/spaces/ITMeshal/jeddah-library-forecast
-```
 
----
+## Project Goal
 
-## Project Overview
+The goal is to help library managers estimate demand by hour and make better staffing and branch planning decisions.
 
-The system predicts the expected number of book rentals per hour based on:
+The system predicts expected rentals using:
 
-- Date
-- Hour
+- Date and hour
 - Weather data
 - Library branch
 - Book category
@@ -29,53 +22,21 @@ The system predicts the expected number of book rentals per hour based on:
 - Holiday status
 - Day of week
 
-The project also provides a simple suggested action based on the predicted demand.
+## Features
 
-Example:
-
-```text
-Expected rentals: 63.2
-Demand level: High
-Suggested action: Add extra staff and prepare popular categories before this hour.
-```
-
----
-
-## Current Features
-
-- Data cleaning
-- Feature engineering
-- Model training
-- Model comparison
+- Data cleaning and feature engineering
+- Model training and comparison
 - Best model saving
-- Sample prediction script
-- Prediction API using FastAPI
-- Interactive Streamlit dashboard
-- Live dashboard demo on Hugging Face Spaces
-- Docker support
-- Airflow training pipeline
-- Daily automated pipeline schedule
+- FastAPI prediction API
+- Streamlit dashboard
 - MLflow experiment tracking
-- Model metrics and parameter logging
-- Demand insights
-- Staffing recommendation
+- Airflow pipeline automation
+- Docker Compose setup
+- Hugging Face dashboard demo
 
----
+## Models
 
-## Models Used
-
-The project trains and compares four machine learning models:
-
-- Linear Regression
-- Decision Tree
-- Random Forest
-- Neural Network
-
-The best model is selected based on evaluation results.
-
----
-
-## Model Results
+The project compares four models:
 
 | Model | R2 | MAE | RMSE |
 |---|---:|---:|---:|
@@ -88,415 +49,51 @@ Best model:
 
 **Neural Network**
 
----
-
 ## Project Structure
 
 ```text
 jeddah-library-demand/
-│
-├── airflow/
-│   └── dags/
-│       └── library_pipeline.py
-│
 ├── api/
-│   └── main.py
-│
 ├── dashboard/
-│   └── app.py
-│
+├── airflow/
 ├── data/
-│   ├── raw/
-│   │   └── jeddah_library_rentals.csv
-│   └── processed/
-│       └── cleaned_library_rentals.csv
-│
 ├── models/
-│   ├── best_model.pkl
-│   └── model_metadata.json
-│
 ├── reports/
-│   └── model_results.csv
-│
 ├── src/
-│   ├── clean_data.py
-│   ├── data_processing.py
-│   ├── predict.py
-│   └── train_model.py
-│
-├── .dockerignore
-├── .gitignore
 ├── Dockerfile
 ├── Dockerfile.airflow
 ├── docker-compose.yml
 ├── docker-compose.airflow.yml
-├── README.md
 ├── requirements.txt
-└── streamlit_app.py
+├── streamlit_app.py
+└── README.md
 ```
 
-Generated local files such as `mlflow.db`, `mlartifacts/`, and `mlruns/` are ignored by Git.
-
----
-
-## How to Run the Project
-
-### 1. Clone the Repository
-
-```bash
-git clone https://github.com/Meshal-Alajlani/jeddah-library-demand.git
-```
-
-Go inside the project folder:
-
-```bash
-cd jeddah-library-demand
-```
-
----
-
-### 2. Install Requirements
-
-```bash
-pip install -r requirements.txt
-```
-
----
-
-### 3. Clean the Data
-
-```bash
-python src/clean_data.py
-```
-
-This creates the cleaned dataset here:
-
-```text
-data/processed/cleaned_library_rentals.csv
-```
-
----
-
-### 4. Train the Models
-
-```bash
-python src/train_model.py
-```
-
-This will:
-
-- Train the machine learning models
-- Compare their performance
-- Select the best model
-- Save the best model
-- Log model experiments using MLflow
-
-The best model will be saved here:
-
-```text
-models/best_model.pkl
-```
-
-The model results will be saved here:
-
-```text
-reports/model_results.csv
-```
-
-MLflow tracking files will be created locally:
-
-```text
-mlflow.db
-mlartifacts/
-```
-
----
-
-### 5. Run a Sample Prediction
-
-```bash
-python src/predict.py
-```
-
-Example output:
-
-```text
-Expected rentals: 92.84
-```
-
----
-
-## Run the API
-
-The API allows users to send input data and get a rental demand prediction.
-
-Start the API server:
-
-```bash
-python -m uvicorn api.main:app --reload
-```
-
-Open this link in the browser:
-
-```text
-http://127.0.0.1:8000
-```
-
-You should see:
-
-```json
-{
-  "message": "Jeddah Library Demand API is running."
-}
-```
-
-API documentation:
-
-```text
-http://127.0.0.1:8000/docs
-```
-
----
-
-## API Prediction Example
-
-Go to:
-
-```text
-http://127.0.0.1:8000/docs
-```
-
-Open:
-
-```text
-POST /predict
-```
-
-Click:
-
-```text
-Try it out
-```
-
-Use this example input:
-
-```json
-{
-  "Date": "24/05/2026",
-  "Hour": 17,
-  "Temperature_C": 34,
-  "Humidity_pct": 55,
-  "Wind_Speed_ms": 4.2,
-  "Visibility_m": 1500,
-  "Solar_Radiation_MJm2": 1.4,
-  "Rainfall_mm": 0,
-  "Season": "Summer",
-  "Holiday": "No",
-  "Library_Branch": "University Branch",
-  "Top_Category": "Technology",
-  "Membership_Type": "Student",
-  "Day_of_Week": "Sunday"
-}
-```
-
-Example response:
-
-```json
-{
-  "expected_rentals": 92.84
-}
-```
-
----
-
-## Run the Dashboard
-
-The dashboard provides a visual interface for demand forecasting, branch activity, peak hours, and suggested staffing actions.
-
-Start the dashboard:
-
-```bash
-python -m streamlit run dashboard/app.py
-```
-
-Or run the Hugging Face entry point locally:
-
-```bash
-python -m streamlit run streamlit_app.py
-```
-
-The dashboard includes:
-
-- Expected rental demand
-- Demand level
-- Suggested operational action
-- Peak hour snapshot
-- Average rentals by hour
-- Average rentals by branch
-- Light and dark mode
-
-Example output:
-
-```text
-Expected rentals: 63.2
-Demand level: High
-Suggested action: Add extra staff and prepare popular categories before this hour.
-```
-
----
-
-## Run MLflow Experiment Tracking
-
-This project uses MLflow to track machine learning experiments.
-
-MLflow records:
-
-- Model name
-- Model parameters
-- R2 score
-- MAE
-- RMSE
-- Best model summary
-- Training artifacts
-
-Start MLflow locally:
-
-```bash
-python -m mlflow ui --backend-store-uri sqlite:///mlflow.db --default-artifact-root mlartifacts --host 127.0.0.1 --port 5000
-```
-
-Open MLflow in the browser:
-
-```text
-http://127.0.0.1:5000
-```
-
-The experiment name is:
-
-```text
-Jeddah Library Demand Advisor
-```
-
-The main training runs include:
-
-```text
-Linear Regression
-Decision Tree
-Random Forest
-Neural Network
-Best Model Summary - Neural Network
-```
-
----
-
-## Run API, Dashboard, and MLflow with Docker
-
-This project can start the API, dashboard, and MLflow using Docker Compose.
+## Run with Docker
 
 Make sure Docker Desktop is running.
-
-Build and start the containers:
 
 ```bash
 docker compose up --build
 ```
 
-After the containers start, open:
+Open:
 
 ```text
-http://127.0.0.1:8000
+Dashboard: http://127.0.0.1:8501
+API:       http://127.0.0.1:8000
+MLflow:    http://127.0.0.1:5000
 ```
 
-For the API.
-
-```text
-http://127.0.0.1:8501
-```
-
-For the dashboard.
-
-```text
-http://127.0.0.1:5000
-```
-
-For MLflow.
-
-To stop the containers, press:
-
-```text
-Ctrl + C
-```
-
-Or run:
+Stop containers:
 
 ```bash
 docker compose down
 ```
 
----
+## Run Manually
 
-## Run the Airflow Pipeline
-
-This project includes an Airflow pipeline that automates the machine learning workflow.
-
-The pipeline runs these tasks:
-
-```text
-preprocess_library_data
-↓
-train_and_evaluate_models
-↓
-validate_prediction_output
-```
-
-The DAG is scheduled to run daily.
-
-Make sure Docker Desktop is running.
-
-Start Airflow:
-
-```bash
-docker compose -f docker-compose.airflow.yml up --build
-```
-
-Open Airflow in the browser:
-
-```text
-http://127.0.0.1:8080
-```
-
-Login:
-
-```text
-username: admin
-password: admin
-```
-
-Find the DAG:
-
-```text
-library_demand_training_pipeline
-```
-
-You can run it manually by clicking the play button.
-
-To stop Airflow, press:
-
-```text
-Ctrl + C
-```
-
-Then run:
-
-```bash
-docker compose -f docker-compose.airflow.yml down
-```
-
----
-
-## Main Commands Summary
-
-Install libraries:
+Install dependencies:
 
 ```bash
 pip install -r requirements.txt
@@ -508,7 +105,7 @@ Clean data:
 python src/clean_data.py
 ```
 
-Train models and log MLflow experiments:
+Train models:
 
 ```bash
 python src/train_model.py
@@ -538,33 +135,50 @@ Run MLflow:
 python -m mlflow ui --backend-store-uri sqlite:///mlflow.db --default-artifact-root mlartifacts --host 127.0.0.1 --port 5000
 ```
 
-Run API, dashboard, and MLflow with Docker:
+## API Example
 
-```bash
-docker compose up --build
+Endpoint:
+
+```text
+POST /predict
 ```
 
-Stop Docker containers:
+Example response:
 
-```bash
-docker compose down
+```json
+{
+  "expected_rentals": 92.84
+}
 ```
 
-Run Airflow:
+## Airflow Pipeline
+
+Start Airflow:
 
 ```bash
 docker compose -f docker-compose.airflow.yml up --build
 ```
 
-Stop Airflow:
+Open:
 
-```bash
-docker compose -f docker-compose.airflow.yml down
+```text
+http://127.0.0.1:8080
 ```
 
----
+Login:
 
-## Technologies Used
+```text
+username: admin
+password: admin
+```
+
+Pipeline tasks:
+
+```text
+preprocess_library_data → train_and_evaluate_models → validate_prediction_output
+```
+
+## Technologies
 
 - Python
 - Pandas
@@ -574,36 +188,9 @@ docker compose -f docker-compose.airflow.yml down
 - Streamlit
 - Altair
 - Docker
-- Docker Compose
 - Apache Airflow
 - MLflow
-- SQLite
-- Joblib
-- Git
-- GitHub
 - Hugging Face Spaces
-
----
-
-## Why This Project Matters
-
-Many small organizations make daily staffing and inventory decisions based on guessing.
-
-This project shows how machine learning can support better operational decisions by predicting demand and giving simple recommendations.
-
-Instead of only building a model, this project turns the model into a usable system with:
-
-- A training pipeline
-- A saved best model
-- An API
-- An interactive dashboard
-- Dockerized services
-- An Airflow automation pipeline
-- MLflow experiment tracking
-- A live demo on Hugging Face Spaces
-- A simple decision recommendation
-
----
 
 ## Future Improvements
 
