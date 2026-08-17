@@ -192,7 +192,3 @@ preprocess_library_data → train_and_evaluate_models → validate_prediction_ou
 - MLflow
 - Hugging Face Spaces
 
-## Future Improvements
-
-- Add an architecture diagram
-- Add dashboard screenshots to the README
